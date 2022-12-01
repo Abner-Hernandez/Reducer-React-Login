@@ -6,11 +6,11 @@ const guardarSesion = (usuario: Usuario) => {
     sessionStorage.setItem("conectado", usuario.conectado.toString());
 }
 
-const usuarioReducer = (state: Usuario, action: { type: string, correoElectronico: string, nombre: string, password: string }) => {
+const usuarioReducer = (state: Usuario, action: { type: string, correoElectronico?: string, nombre?: string, password?: string }) => {
     let usuario: Usuario;
     switch (action.type) {
         case 'registrarse':
-            usuario = new Usuario(action.correoElectronico, action.nombre !== undefined ? action.nombre : '', action.password !== undefined ? action.password : '', true);
+            usuario = new Usuario(action.correoElectronico || '', action.nombre || '', action.password || '', true);
             //guardamos la sessión
             guardarSesion(usuario);
             return usuario;
@@ -27,7 +27,7 @@ const usuarioReducer = (state: Usuario, action: { type: string, correoElectronic
             sessionStorage.clear();
             return new Usuario("","","",false);
         case 'restaurar_sesion':
-            return new Usuario(action.correoElectronico, action.nombre !== undefined ? action.nombre : '', action.password !== undefined ? action.password : '', true);
+            return new Usuario(action.correoElectronico || '', action.nombre || '', action.password || '', true);
         default:
             return state
     }

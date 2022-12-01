@@ -7,9 +7,18 @@ import RequireAuth from '../componentes/requireAuth';
 import UsuarioContext, { initialState } from '../context/usuarioContext';
 import MenuAtel from '../Navbar/menuAtel';
 import usuarioReducer from '../reducers/usuarioReducer';
+import { useIdleTimer } from 'react-idle-timer'
 
 const AppRouter = () => {
     const [state, dispatch] = useReducer(usuarioReducer, initialState);
+
+    const onIdle = () => {
+        if(state.conectado){
+            dispatch({type: "desconectarse"})
+        }
+    }
+
+    useIdleTimer({ onIdle, timeout: 1000 * 60 * 5 })
 
     useEffect(() => {
         // Recuperamos session si esta existe

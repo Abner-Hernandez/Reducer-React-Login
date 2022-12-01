@@ -1,8 +1,8 @@
 const Inicio = (): JSX.Element => {
     return (
-        <div>
+        <>
             Hello world
-        </div>
+        </>
     )
 }
 

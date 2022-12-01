@@ -1,4 +1,4 @@
-import { useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Inicio from '../componentes/inicio';
 import Login from '../componentes/login';
@@ -10,6 +10,18 @@ import usuarioReducer from '../reducers/usuarioReducer';
 
 const AppRouter = () => {
     const [state, dispatch] = useReducer(usuarioReducer, initialState);
+
+    useEffect(() => {
+        // Recuperamos session si esta existe
+        if (sessionStorage.getItem("nombre") && sessionStorage.getItem("conectado")) {
+            dispatch({
+                type: "restaurar_sesion",
+                correoElectronico: sessionStorage.getItem("correoElectronico") || '',
+                nombre: sessionStorage.getItem("nombre") || '',
+                password: '',
+            });
+        }
+    }, []);
 
     return (
         <UsuarioContext.Provider value={{ state, dispatch }}>

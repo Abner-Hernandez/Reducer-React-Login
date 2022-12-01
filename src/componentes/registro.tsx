@@ -22,14 +22,13 @@ const Registro = () => {
         confirmarPassword: '',
         aceptaPoliticas: false
     }
-    const [ingreso, setIngreso] = useState(false);
 
     useEffect(() => {
         if(usuario.state.conectado){
             navigate('/inicio')
         }
-        setIngreso(false);
-    }, [ingreso])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [usuario.state])
 
     const { control, formState: { errors }, handleSubmit, reset } = useForm({ defaultValues: valoresPorDefecto });
 
@@ -43,7 +42,6 @@ const Registro = () => {
         localStorage.setItem("usuarios", JSON.stringify(usuarios));
         setMostrarMensaje(true);
         reset();
-        setIngreso(true);
     };
 
     const getFormErrorMessage = (nombre: keyof typeof errors) => {

@@ -19,6 +19,7 @@ const Login = () => {
         if(usuario.state.conectado){
             navigate('/inicio')
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [usuario.state])
 
 

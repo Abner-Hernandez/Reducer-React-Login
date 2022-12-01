@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
@@ -13,7 +13,14 @@ const Login = () => {
     const valoresPorDefecto = {
         correoElectronico: '',
         password: '',
-    }
+    };
+
+    useEffect(() => {
+        if(usuario.state.conectado){
+            navigate('/inicio')
+        }
+    }, [usuario.state])
+
 
     const { control, formState: { errors }, handleSubmit, reset } = useForm({ defaultValues: valoresPorDefecto });
 
@@ -25,8 +32,6 @@ const Login = () => {
     const getFormErrorMessage = (nombre: keyof typeof errors) => {
         return errors[nombre] && <small className="p-error">{errors[nombre]?.message}</small>
     };
-
-    const passwordHeader = <h6>Pick a password</h6>;
 
     return (
         <div className="form-login">
@@ -49,7 +54,8 @@ const Login = () => {
                         <div className="field">
                             <span className="p-float-label">
                                 <Controller name="password" control={control} rules={{ required: 'La contraseña es obligatoria.' }} render={({ field, fieldState }) => (
-                                    <Password id={field.name} {...field} toggleMask className={classNames({ 'p-invalid': fieldState.invalid })} header={passwordHeader} />
+                                    <Password id={field.name} {...field} toggleMask className={classNames({ 'p-invalid': fieldState.invalid })} 
+                                    promptLabel="Ingrese una Contraseña"/>
                                 )} />
                                 <label htmlFor="password" className={classNames({ 'p-error': errors.password })}>Contraseña*</label>
                             </span>

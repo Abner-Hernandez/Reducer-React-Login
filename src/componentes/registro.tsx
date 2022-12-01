@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
@@ -22,19 +22,28 @@ const Registro = () => {
         confirmarPassword: '',
         aceptaPoliticas: false
     }
+    const [ingreso, setIngreso] = useState(false);
+
+    useEffect(() => {
+        if(usuario.state.conectado){
+            navigate('/inicio')
+        }
+        setIngreso(false);
+    }, [ingreso])
 
     const { control, formState: { errors }, handleSubmit, reset } = useForm({ defaultValues: valoresPorDefecto });
 
-    const onSubmit = (data: any) => {
+    const onSubmit = async (data: any) => {
         if(data.password !== data.confirmarPassword) {
             return;
         }
-        usuario.dispatch({type: 'registrarse', correoElectronico: data.correoElectronico, nombre: data.nombre, password: data.password});
+        await usuario.dispatch({type: 'registrarse', correoElectronico: data.correoElectronico, nombre: data.nombre, password: data.password});
         let usuarios: Usuario[] = JSON.parse(localStorage.getItem("usuarios")!) || new Array<Usuario>();
         usuarios.push(new Usuario(data.correoElectronico, data.nombre, data.password, true));
         localStorage.setItem("usuarios", JSON.stringify(usuarios));
         setMostrarMensaje(true);
         reset();
+        setIngreso(true);
     };
 
     const getFormErrorMessage = (nombre: keyof typeof errors) => {
@@ -121,7 +130,7 @@ const Registro = () => {
                         <Button type="submit" label="Submit" className="mt-2" />
                     </form>
                     <Button className="p-button-link" label='Ya tiene cuenta, ingrese!' onClick={() => {
-                        navigate('/')
+                        navigate('/ingreso')
                     }} />
                 </div>
             </div>
